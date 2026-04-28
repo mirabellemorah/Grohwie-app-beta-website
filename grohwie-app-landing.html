@@ -1,0 +1,2468 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grohwie — Learn motion design like a game</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700;800;900&family=Geist+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f4f1ec;
+      --bg-deep: #ebe6dd;
+      --ink: #14110f;
+      --ink-soft: #2a2520;
+      --muted: #6f655c;
+      --lav: #8b7cf6;
+      /* grohwie lavender */
+      --lav-deep: #6d5fe0;
+      --lav-soft: #c5bcfa;
+      --lav-tint: #e8e3ff;
+      --acid: #d4ff3e;
+      /* gamified accent */
+      --hot: #ff5a3c;
+      /* streak / fire */
+      --warn: #ffb800;
+      --line: #1a1815;
+      --shadow: 0 1px 0 rgba(0, 0, 0, .06), 0 8px 24px -8px rgba(20, 17, 15, .18);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Geist', sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      font-feature-settings: "ss01", "ss02", "cv11";
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::selection {
+      background: var(--acid);
+      color: var(--ink);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: 0;
+      background: none;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: .35;
+      pointer-events: none;
+      z-index: 100;
+      mix-blend-mode: multiply;
+    }
+
+    /* === Top bar === */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 90;
+      background: rgba(244, 241, 236, .72);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(20, 24, 21, .06);
+    }
+
+    .logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      line-height: 1;
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+    }
+
+    .logo span.dot {
+      color: var(--lav);
+    }
+
+    .logo .star {
+      font-size: 12px;
+      transform: translateY(-10px);
+      display: inline-block;
+      color: var(--lav);
+    }
+
+    .topbar-meta {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      font-size: 12px;
+      font-family: 'Geist Mono', monospace;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .pill-cta {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      transition: all .25s cubic-bezier(.2, .8, .2, 1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-cta:hover {
+      background: var(--lav);
+      color: var(--ink);
+      transform: translateY(-1px);
+    }
+
+    .pill-cta .pulse {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--acid);
+      box-shadow: 0 0 0 0 var(--acid);
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(212, 255, 62, .7);
+      }
+
+      70% {
+        box-shadow: 0 0 0 8px rgba(212, 255, 62, 0);
+      }
+
+      100% {
+        box-shadow: 0 0 0 0 rgba(212, 255, 62, 0);
+      }
+    }
+
+    /* === Hero === */
+    .hero {
+      min-height: 100vh;
+      padding: 120px 28px 60px;
+      display: grid;
+      grid-template-columns: 1fr 0.85fr;
+      gap: 48px;
+      align-items: center;
+      max-width: 1440px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .hero-meta {
+      position: absolute;
+      top: 92px;
+      left: 28px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      display: flex;
+      gap: 18px;
+    }
+
+    .hero-meta .live::before {
+      content: "●";
+      color: var(--hot);
+      margin-right: 6px;
+      animation: blink 1.4s infinite;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    .eyebrow {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--ink);
+      display: inline-block;
+    }
+
+    .hero h1 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      letter-spacing: -0.025em;
+      font-size: clamp(48px, 8vw, 112px);
+      line-height: 0.92;
+      margin: 0 0 28px;
+      color: var(--ink);
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--lav);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1 .tag {
+      background: var(--acid);
+      color: var(--ink);
+      font-style: normal;
+      font-family: 'Geist', sans-serif;
+      font-size: 0.32em;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      padding: 6px 14px 8px;
+      border-radius: 999px;
+      vertical-align: middle;
+      display: inline-block;
+      transform: rotate(-3deg) translateY(-12px);
+      box-shadow: 4px 4px 0 var(--ink);
+      text-transform: uppercase;
+    }
+
+    .hero p.lede {
+      font-size: 19px;
+      line-height: 1.5;
+      color: var(--ink-soft);
+      max-width: 540px;
+      margin: 0 0 36px;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 16px 26px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all .25s cubic-bezier(.2, .8, .2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-primary::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: var(--lav);
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(.2, .8, .2, 1);
+      z-index: 0;
+    }
+
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-primary:hover::after {
+      transform: translateY(0);
+    }
+
+    .btn-primary:hover {
+      color: var(--ink);
+    }
+
+    .arrow {
+      display: inline-block;
+      transition: transform .25s;
+    }
+
+    .btn-primary:hover .arrow {
+      transform: translate(3px, -3px) rotate(-45deg);
+    }
+
+    .btn-ghost {
+      color: var(--ink);
+      padding: 14px 4px;
+      font-size: 14px;
+      font-weight: 500;
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .hero-trust {
+      margin-top: 36px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .avatar-stack {
+      display: flex;
+    }
+
+    .avatar-stack .av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid var(--bg);
+      margin-left: -8px;
+      background: var(--lav);
+      display: grid;
+      place-items: center;
+      font-family: 'Geist', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .av:nth-child(1) {
+      background: linear-gradient(135deg, #ffb380, #ff7a45);
+      margin-left: 0;
+    }
+
+    .av:nth-child(2) {
+      background: linear-gradient(135deg, #c5bcfa, #8b7cf6);
+    }
+
+    .av:nth-child(3) {
+      background: linear-gradient(135deg, #d4ff3e, #a8d423);
+    }
+
+    .av:nth-child(4) {
+      background: linear-gradient(135deg, #ffd1dc, #ff6b9d);
+    }
+
+    /* === Phone mock === */
+    .phone-stage {
+      position: relative;
+      perspective: 1200px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .floating-bits {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .float-bit {
+      position: absolute;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      background: var(--ink);
+      color: var(--bg);
+      padding: 6px 11px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      animation: floaty 4s ease-in-out infinite;
+      z-index: 3;
+    }
+
+    .float-bit.acid {
+      background: var(--acid);
+      color: var(--ink);
+    }
+
+    .float-bit.lav {
+      background: var(--lav);
+      color: var(--ink);
+    }
+
+    @keyframes floaty {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    .float-bit.b1 {
+      top: 4%;
+      left: -8%;
+      animation-delay: 0s;
+    }
+
+    .float-bit.b2 {
+      top: 20%;
+      right: -6%;
+      animation-delay: .8s;
+    }
+
+    .float-bit.b3 {
+      bottom: 22%;
+      left: -10%;
+      animation-delay: 1.6s;
+    }
+
+    .float-bit.b4 {
+      bottom: 6%;
+      right: -2%;
+      animation-delay: 2.4s;
+    }
+
+    .phone {
+      width: 320px;
+      height: 640px;
+      background: #0d0c0b;
+      border-radius: 44px;
+      padding: 12px;
+      box-shadow: 0 30px 80px -20px rgba(20, 17, 15, .45), 0 0 0 1px rgba(255, 255, 255, .04) inset;
+      position: relative;
+      transform: rotate(-3deg);
+      transition: transform .6s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .phone:hover {
+      transform: rotate(0deg) translateY(-6px);
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 24px;
+      background: #0d0c0b;
+      border-radius: 999px;
+      z-index: 5;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 32px;
+      background: linear-gradient(180deg, #efeaff 0%, #fff 100%);
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .screen-statusbar {
+      padding: 14px 22px 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .screen-statusbar .icons {
+      display: flex;
+      gap: 4px;
+    }
+
+    .screen-statusbar .icons span {
+      display: inline-block;
+      width: 14px;
+      height: 8px;
+      background: var(--ink);
+      border-radius: 1px;
+    }
+
+    .screen-header {
+      padding: 14px 20px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .streak {
+      background: linear-gradient(135deg, var(--hot), #ffb800);
+      padding: 5px 11px 5px 8px;
+      border-radius: 999px;
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .gem-counter {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .gem-counter .gem {
+      width: 16px;
+      height: 16px;
+      background: var(--lav);
+      clip-path: polygon(50% 0, 100% 38%, 82% 100%, 18% 100%, 0 38%);
+    }
+
+    .screen-greeting {
+      padding: 8px 22px 16px;
+    }
+
+    .screen-greeting h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin: 0 0 4px;
+      line-height: 1.1;
+    }
+
+    .screen-greeting p {
+      margin: 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* lesson path */
+    .lesson-path {
+      flex: 1;
+      padding: 12px 22px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lesson-row {
+      display: flex;
+      align-items: center;
+      padding: 8px 0;
+      position: relative;
+      animation: rowIn .6s ease both;
+    }
+
+    .lesson-row:nth-child(1) {
+      animation-delay: .2s;
+    }
+
+    .lesson-row:nth-child(2) {
+      animation-delay: .35s;
+      justify-content: flex-end;
+    }
+
+    .lesson-row:nth-child(3) {
+      animation-delay: .5s;
+    }
+
+    .lesson-row:nth-child(4) {
+      animation-delay: .65s;
+      justify-content: flex-end;
+    }
+
+    .lesson-row:nth-child(5) {
+      animation-delay: .8s;
+    }
+
+    @keyframes rowIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .lesson-node {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--lav);
+      display: grid;
+      place-items: center;
+      color: var(--ink);
+      font-weight: 700;
+      font-size: 22px;
+      box-shadow: 0 6px 0 var(--lav-deep);
+      position: relative;
+      transition: transform .2s;
+    }
+
+    .lesson-node:hover {
+      transform: translateY(-2px);
+    }
+
+    .lesson-node.locked {
+      background: #d4cebf;
+      box-shadow: 0 6px 0 #b8b1a3;
+      color: #8a8276;
+    }
+
+    .lesson-node.complete {
+      background: var(--acid);
+      box-shadow: 0 6px 0 #94b321;
+    }
+
+    .lesson-node.current {
+      background: var(--lav);
+      box-shadow: 0 6px 0 var(--lav-deep);
+      animation: bob 2s infinite ease-in-out;
+    }
+
+    .lesson-node.current::after {
+      content: "START";
+      position: absolute;
+      top: -28px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--ink);
+      color: var(--bg);
+      font-family: 'Geist Mono', monospace;
+      font-size: 9px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.06em;
+      white-space: nowrap;
+    }
+
+    @keyframes bob {
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-4px);
+      }
+    }
+
+    .lesson-meta {
+      margin-left: 14px;
+      font-size: 11px;
+      color: var(--muted);
+      font-family: 'Geist Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .lesson-row:nth-child(2) .lesson-meta,
+    .lesson-row:nth-child(4) .lesson-meta {
+      margin-right: 14px;
+      margin-left: 0;
+      order: -1;
+      text-align: right;
+    }
+
+    .screen-tabs {
+      padding: 14px 22px;
+      background: white;
+      border-top: 1px solid #e7e1d3;
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .tab {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--bg-deep);
+      display: grid;
+      place-items: center;
+    }
+
+    .tab.active {
+      background: var(--lav-tint);
+    }
+
+    .tab svg {
+      width: 18px;
+      height: 18px;
+      stroke: var(--ink);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    /* === Section base === */
+    .section {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 100px 28px;
+      position: relative;
+    }
+
+    .section-num {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 18px;
+    }
+
+    .section-num::before {
+      content: "( ";
+    }
+
+    .section-num::after {
+      content: " )";
+    }
+
+    .section-title {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      font-size: clamp(40px, 6vw, 84px);
+      line-height: 0.95;
+      margin: 0 0 30px;
+      max-width: 18ch;
+    }
+
+    .section-title em {
+      color: var(--lav);
+      font-style: italic;
+    }
+
+    /* === Marquee === */
+    .marquee {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 22px 0;
+      overflow: hidden;
+      white-space: nowrap;
+      border-top: 1px solid var(--bg);
+      border-bottom: 1px solid var(--bg);
+    }
+
+    .marquee-track {
+      display: inline-flex;
+      gap: 50px;
+      animation: scroll 32s linear infinite;
+    }
+
+    @keyframes scroll {
+      from {
+        transform: translateX(0);
+      }
+
+      to {
+        transform: translateX(-50%);
+      }
+    }
+
+    .marquee span {
+      font-family: 'Instrument Serif', serif;
+      font-size: 36px;
+      font-style: italic;
+      display: inline-flex;
+      align-items: center;
+      gap: 50px;
+    }
+
+    .marquee span::after {
+      content: "✷";
+      color: var(--lav);
+      font-style: normal;
+    }
+
+    /* === Pain section === */
+    .pain {
+      background: var(--ink);
+      color: var(--bg);
+      padding: 100px 28px;
+    }
+
+    .pain-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .pain .section-title {
+      color: var(--bg);
+    }
+
+    .pain .section-title em {
+      color: var(--acid);
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 48px;
+    }
+
+    .pain-card {
+      border: 1px solid rgba(244, 241, 236, .16);
+      border-radius: 24px;
+      padding: 32px 28px;
+      background: rgba(244, 241, 236, .02);
+      transition: all .35s ease;
+      position: relative;
+    }
+
+    .pain-card:hover {
+      background: rgba(139, 124, 246, .08);
+      border-color: rgba(139, 124, 246, .4);
+      transform: translateY(-4px);
+    }
+
+    .pain-card .qmark {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 60px;
+      color: var(--lav);
+      line-height: 0.6;
+      margin-bottom: 18px;
+      opacity: .7;
+    }
+
+    .pain-card h4 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 1.15;
+      margin: 0 0 10px;
+    }
+
+    .pain-card p {
+      color: rgba(244, 241, 236, .65);
+      font-size: 14px;
+      line-height: 1.55;
+      margin: 0;
+    }
+
+    .pain-card p .again {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      color: var(--hot);
+    }
+
+    /* Fake tutorial player — interactive pain demo */
+    .fake-player {
+      margin-top: 22px;
+      border: 1px solid rgba(244, 241, 236, .14);
+      border-radius: 14px;
+      background: #0c0a08;
+      overflow: hidden;
+      font-family: 'Geist Mono', monospace;
+    }
+
+    .fake-player-top {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px;
+      background: rgba(244, 241, 236, .04);
+      border-bottom: 1px solid rgba(244, 241, 236, .08);
+      font-size: 11px;
+      color: rgba(244, 241, 236, .55);
+    }
+
+    .fp-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(244, 241, 236, .18);
+    }
+
+    .fp-title {
+      margin-left: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .fake-player-screen {
+      aspect-ratio: 16 / 7;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background:
+        radial-gradient(circle at 30% 40%, rgba(139, 124, 246, .12), transparent 60%),
+        repeating-linear-gradient(90deg, rgba(244, 241, 236, .03) 0 2px, transparent 2px 4px);
+      color: rgba(244, 241, 236, .7);
+      position: relative;
+    }
+
+    .fp-frame {
+      font-size: 36px;
+      color: var(--lav-soft);
+      transition: transform .25s, color .25s;
+    }
+
+    .fake-player.playing .fp-frame {
+      animation: fpFlicker 1.2s steps(2) infinite;
+      color: rgba(244, 241, 236, .45);
+    }
+
+    @keyframes fpFlicker {
+      50% {
+        opacity: .55;
+        transform: translateX(1px);
+      }
+    }
+
+    .fp-caption {
+      font-size: 11px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: rgba(244, 241, 236, .5);
+      text-align: center;
+      padding: 0 18px;
+      transition: color .25s;
+    }
+
+    .fake-player.bored .fp-caption {
+      color: var(--hot);
+    }
+
+    .fake-player-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-top: 1px solid rgba(244, 241, 236, .08);
+    }
+
+    .fp-progress {
+      flex: 1;
+      height: 4px;
+      background: rgba(244, 241, 236, .1);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fp-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--lav), var(--hot));
+      transition: width .4s linear;
+    }
+
+    .fp-time {
+      font-size: 11px;
+      color: rgba(244, 241, 236, .5);
+    }
+
+    .fake-player-controls {
+      display: flex;
+      gap: 8px;
+      padding: 10px 14px 14px;
+    }
+
+    .fp-btn {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: rgba(244, 241, 236, .06);
+      color: rgba(244, 241, 236, .75);
+      border: 1px solid rgba(244, 241, 236, .12);
+      transition: all .2s;
+    }
+
+    .fp-btn:hover {
+      background: var(--acid);
+      color: var(--ink);
+      border-color: var(--acid);
+    }
+
+    .fake-player.done {
+      animation: fpShake .35s;
+    }
+
+    @keyframes fpShake {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      25% {
+        transform: translateX(-3px);
+      }
+
+      75% {
+        transform: translateX(3px);
+      }
+    }
+
+    .strikethrough {
+      position: relative;
+      display: inline-block;
+    }
+
+    .strikethrough::after {
+      content: "";
+      position: absolute;
+      left: -2px;
+      right: -2px;
+      top: 56%;
+      height: 2px;
+      background: var(--hot);
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: strike 1.4s ease forwards;
+      animation-delay: .4s;
+    }
+
+    @keyframes strike {
+      to {
+        transform: scaleX(1);
+      }
+    }
+
+    /* === Demo lesson === */
+    .demo-section {
+      background: var(--lav-tint);
+      padding: 120px 28px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .demo-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .demo-section .section-title em {
+      color: var(--lav-deep);
+    }
+
+    .demo-card {
+      background: white;
+      border-radius: 28px;
+      padding: 32px;
+      box-shadow: 0 30px 60px -20px rgba(109, 95, 224, .35);
+      position: relative;
+      border: 1px solid rgba(20, 17, 15, .06);
+    }
+
+    .demo-card::before {
+      content: "TRY ME →";
+      position: absolute;
+      top: -14px;
+      right: 22px;
+      background: var(--acid);
+      color: var(--ink);
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 999px;
+      box-shadow: 3px 3px 0 var(--ink);
+      transform: rotate(3deg);
+    }
+
+    .demo-progress {
+      height: 10px;
+      background: var(--bg-deep);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .demo-progress-fill {
+      height: 100%;
+      width: 60%;
+      background: linear-gradient(90deg, var(--lav), var(--acid));
+      border-radius: 999px;
+      transition: width .6s ease;
+    }
+
+    .demo-question {
+      font-family: 'Instrument Serif', serif;
+      font-size: 28px;
+      line-height: 1.15;
+      margin: 0 0 8px;
+    }
+
+    .demo-question em {
+      color: var(--lav);
+      font-style: italic;
+    }
+
+    .demo-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-family: 'Geist Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .demo-curve-stage {
+      background: var(--bg);
+      border-radius: 18px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      border: 1px dashed rgba(20, 17, 15, .12);
+    }
+
+    .demo-curve-stage svg {
+      width: 100%;
+      height: 160px;
+      display: block;
+    }
+
+    .demo-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .demo-opt {
+      border: 2px solid var(--ink);
+      border-radius: 14px;
+      padding: 14px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all .2s;
+      box-shadow: 4px 4px 0 var(--ink);
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .demo-opt:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 6px 6px 0 var(--ink);
+    }
+
+    .demo-opt:active,
+    .demo-opt.active {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 var(--ink);
+    }
+
+    .demo-opt.correct {
+      background: var(--acid);
+      border-color: var(--ink);
+    }
+
+    .demo-opt.wrong {
+      background: #ffd5cc;
+      border-color: var(--hot);
+    }
+
+    .demo-opt .opt-key {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      width: 24px;
+      height: 24px;
+      display: grid;
+      place-items: center;
+      background: var(--ink);
+      color: var(--bg);
+      border-radius: 6px;
+    }
+
+    .demo-result {
+      margin-top: 16px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: var(--acid);
+      color: var(--ink);
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+      border-left: 4px solid var(--ink);
+    }
+
+    .demo-result.show {
+      display: block;
+      animation: pop .35s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(.9);
+        opacity: 0;
+      }
+
+      100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .xp-pop {
+      position: absolute;
+      top: 30%;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 60px;
+      color: var(--lav-deep);
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .xp-pop.go {
+      animation: xpfly 1.2s ease-out forwards;
+    }
+
+    @keyframes xpfly {
+      0% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(20px) scale(.8);
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-80px) scale(1.4);
+      }
+    }
+
+    /* === HAD section === */
+    .promise {
+      padding: 120px 28px;
+      background: var(--bg);
+    }
+
+    .promise-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .promise-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 60px;
+    }
+
+    .promise-card {
+      background: white;
+      border-radius: 24px;
+      padding: 36px 32px;
+      border: 1px solid rgba(20, 17, 15, .08);
+      position: relative;
+      overflow: hidden;
+      transition: all .4s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .promise-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 50px -20px rgba(20, 17, 15, .2);
+    }
+
+    .promise-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 80% at 100% 0%, var(--lav-tint) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+
+    .promise-card:hover::before {
+      opacity: 1;
+    }
+
+    .promise-card>* {
+      position: relative;
+    }
+
+    .promise-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: var(--ink);
+      color: var(--acid);
+      display: grid;
+      place-items: center;
+      font-family: 'Instrument Serif', serif;
+      font-style: italic;
+      font-size: 28px;
+      margin-bottom: 24px;
+    }
+
+    .promise-card.lav .promise-icon {
+      background: var(--lav);
+      color: var(--ink);
+    }
+
+    .promise-card.acid .promise-icon {
+      background: var(--acid);
+      color: var(--ink);
+    }
+
+    .promise-card h3 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: 30px;
+      margin: 0 0 14px;
+      line-height: 1.1;
+    }
+
+    .promise-card h3 em {
+      color: var(--lav);
+      font-style: italic;
+    }
+
+    .promise-card p {
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+      margin: 0 0 20px;
+    }
+
+    .promise-tag {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      border-top: 1px solid rgba(20, 17, 15, .08);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* === Stats / counter strip === */
+    .counter-strip {
+      background: var(--lav);
+      padding: 60px 28px;
+      color: var(--ink);
+    }
+
+    .counter-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+
+    .stat .num {
+      font-family: 'Instrument Serif', serif;
+      font-size: clamp(48px, 6vw, 80px);
+      font-weight: 400;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+    }
+
+    .stat .num em {
+      font-style: italic;
+    }
+
+    .stat .lbl {
+      font-family: 'Geist Mono', monospace;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-top: 10px;
+      color: var(--ink-soft);
+    }
+
+    /* === Waitlist === */
+    .waitlist {
+      padding: 140px 28px 100px;
+      background: var(--ink);
+      color: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .waitlist::before {
+      content: "";
+      position: absolute;
+      top: -120px;
+      right: -120px;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--lav) 0%, transparent 70%);
+      opacity: .35;
+      filter: blur(40px);
+    }
+
+    .waitlist::after {
+      content: "";
+      position: absolute;
+      bottom: -100px;
+      left: -100px;
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, var(--acid) 0%, transparent 70%);
+      opacity: .2;
+      filter: blur(40px);
+    }
+
+    .waitlist-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .waitlist-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(244, 241, 236, .1);
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 28px;
+      border: 1px solid rgba(244, 241, 236, .18);
+    }
+
+    .waitlist-eyebrow .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--acid);
+      animation: pulse 1.6s infinite;
+    }
+
+    .waitlist h2 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: 0.95;
+      margin: 0 0 18px;
+    }
+
+    .waitlist h2 em {
+      color: var(--acid);
+      font-style: italic;
+    }
+
+    .waitlist .lede2 {
+      font-size: 18px;
+      line-height: 1.55;
+      opacity: .8;
+      max-width: 540px;
+      margin: 0 auto 40px;
+    }
+
+    .form-wrap {
+      background: rgba(244, 241, 236, .05);
+      border: 1px solid rgba(244, 241, 236, .16);
+      border-radius: 24px;
+      padding: 26px;
+      backdrop-filter: blur(8px);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
+
+    .form-input {
+      flex: 1;
+      background: transparent;
+      border: 1px solid rgba(244, 241, 236, .22);
+      color: var(--bg);
+      padding: 16px 20px;
+      font-size: 15px;
+      font-family: inherit;
+      border-radius: 999px;
+      outline: none;
+      transition: all .25s;
+    }
+
+    .form-input::placeholder {
+      color: rgba(244, 241, 236, .45);
+    }
+
+    .form-input:focus {
+      border-color: var(--acid);
+      background: rgba(244, 241, 236, .04);
+    }
+
+    .form-submit {
+      background: var(--acid);
+      color: var(--ink);
+      padding: 16px 28px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all .25s;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .form-submit:hover {
+      background: var(--bg);
+      transform: translateY(-2px);
+    }
+
+    .form-submit-block {
+      width: 100%;
+      justify-content: center;
+      margin-top: 22px;
+      padding: 18px 28px;
+    }
+
+    .role-row {
+      margin-top: 18px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .role-chip {
+      padding: 8px 14px;
+      border: 1px solid rgba(244, 241, 236, .22);
+      border-radius: 999px;
+      font-size: 12px;
+      color: rgba(244, 241, 236, .78);
+      transition: all .2s;
+      cursor: pointer;
+      font-family: 'Geist Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .role-chip:hover,
+    .role-chip.on {
+      background: var(--bg);
+      color: var(--ink);
+      border-color: var(--bg);
+    }
+
+    .form-meta {
+      margin-top: 22px;
+      font-size: 12px;
+      opacity: .55;
+      font-family: 'Geist Mono', monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .success {
+      display: none;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .success.show {
+      display: block;
+    }
+
+    .success h3 {
+      font-family: 'Instrument Serif', serif;
+      font-size: 36px;
+      margin: 0 0 8px;
+      color: var(--acid);
+    }
+
+    .success p {
+      margin: 0 0 18px;
+      font-size: 15px;
+      opacity: .85;
+    }
+
+    .position-badge {
+      display: inline-flex;
+      gap: 14px;
+      background: rgba(244, 241, 236, .08);
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-family: 'Geist Mono', monospace;
+      font-size: 13px;
+    }
+
+    .position-badge strong {
+      color: var(--acid);
+      font-size: 18px;
+    }
+
+    /* Confetti */
+    .confetti-wrap {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    .conf {
+      position: absolute;
+      width: 8px;
+      height: 14px;
+      opacity: 0;
+    }
+
+    .conf.go {
+      animation: confetti 1.4s ease-out forwards;
+    }
+
+    @keyframes confetti {
+      0% {
+        opacity: 1;
+        transform: translateY(0) rotate(0);
+      }
+
+      100% {
+        opacity: 0;
+        transform: translateY(-260px) translateX(var(--x, 0)) rotate(720deg);
+      }
+    }
+
+    /* === Footer === */
+    .footer {
+      padding: 60px 28px 40px;
+      background: var(--bg-deep);
+      border-top: 1px solid rgba(20, 17, 15, .08);
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+
+    .footer-logo {
+      font-family: 'Instrument Serif', serif;
+      font-size: 84px;
+      line-height: 0.9;
+      letter-spacing: -0.02em;
+    }
+
+    .footer-logo em {
+      color: var(--lav);
+      font-style: italic;
+    }
+
+    .footer-meta {
+      font-family: 'Geist Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      text-align: right;
+    }
+
+    .footer-meta a {
+      color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 1px;
+    }
+
+    .footer-meta div+div {
+      margin-top: 8px;
+    }
+
+    /* === Responsive === */
+    @media (max-width: 980px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding-top: 130px;
+        gap: 50px;
+      }
+
+      .hero-meta {
+        display: none;
+      }
+
+      .pain-grid,
+      .promise-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .demo-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .counter-inner {
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+      }
+
+      .form-row {
+        flex-direction: column;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .footer-logo {
+        font-size: 56px;
+      }
+
+      .footer-meta {
+        text-align: left;
+      }
+
+      .topbar-meta .hide-mob {
+        display: none;
+      }
+
+      .marquee span {
+        font-size: 26px;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .demo-options {
+        grid-template-columns: 1fr;
+      }
+
+      .counter-inner {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        transform: rotate(0);
+        z-index: 1;
+      }
+
+      .float-bit {
+        font-size: 10px;
+        padding: 5px 9px;
+      }
+
+      /* Pull the floats inward on mobile so they sit on the phone, not off-screen */
+      .float-bit.b1 {
+        top: 2%;
+        left: 2%;
+      }
+
+      .float-bit.b2 {
+        top: 18%;
+        right: 2%;
+      }
+
+      .float-bit.b3 {
+        bottom: 22%;
+        left: 2%;
+      }
+
+      .float-bit.b4 {
+        bottom: 6%;
+        right: 2%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="logo">Grohwie<span class="star">✦</span></div>
+    <div class="topbar-meta">
+      <!-- <span class="hide-mob">(motion / graphics / ui-ux)
+    <span>2026</span> </span> -->
+      <a href="#waitlist" class="pill-cta"><span class="pulse"></span> Join waitlist</a>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-meta">
+      <span>(01) the app</span>
+      <span class="live">cohort waitlist open</span>
+    </div>
+
+    <div class="hero-text">
+      <div class="eyebrow">Now in beta · For motion graphic designers</div>
+      <h1>
+        Learn motion <em>like a game</em>,
+        get hired <em>like a pro.</em>
+        <span class="tag">15 min/day</span>
+      </h1>
+      <p class="lede">
+        The gamified learning platform for people who want to become better motion designers, need direction, and are
+        tired of $$$ expensive courses they never finish. Learn design and animation principles in tiny daily sprints.
+        Join challenges, communities and find job opportunities
+        while you play and learn.
+      </p>
+      <div class="hero-cta-row">
+        <a href="#waitlist" class="btn-primary">
+          <span>Get early access</span>
+          <span class="arrow">↗</span>
+        </a>
+        <a href="#demo" class="btn-ghost">Try a lesson →</a>
+      </div>
+      <div class="hero-trust">
+        <div class="avatar-stack">
+          <div class="av">M</div>
+          <div class="av">A</div>
+          <div class="av">K</div>
+          <div class="av">+</div>
+        </div>
+        <span><strong id="trustcount" style="color:var(--ink)">347</strong> designers waitlisted · Lagos · Glasgow ·
+          Berlin · NYC</span>
+      </div>
+    </div>
+
+    <!-- PHONE MOCK -->
+    <div class="phone-stage">
+      <div class="floating-bits">
+        <div class="float-bit b1">+50 XP</div>
+        <div class="float-bit b2 acid">🔥 14-day streak</div>
+        <div class="float-bit b3 lav">level up ↑</div>
+        <div class="float-bit b4">badge unlocked</div>
+      </div>
+
+      <div class="phone">
+        <div class="phone-screen">
+          <div class="screen-statusbar">
+            <span>9:41</span>
+            <div class="icons"><span></span><span style="opacity:.6"></span></div>
+          </div>
+
+          <div class="screen-header">
+            <div class="streak">🔥 14</div>
+            <div class="gem-counter">
+              <div class="gem"></div> 1,240
+            </div>
+          </div>
+
+          <div class="screen-greeting">
+            <h3>Welcome back, friend</h3>
+            <p>Section 3 · The art of easing</p>
+          </div>
+
+          <div class="lesson-path">
+            <div class="lesson-row">
+              <div class="lesson-node complete">✓</div>
+              <div class="lesson-meta">Keyframes 101</div>
+            </div>
+            <div class="lesson-row">
+              <div class="lesson-meta">Anticipation</div>
+              <div class="lesson-node complete">✓</div>
+            </div>
+            <div class="lesson-row">
+              <div class="lesson-node current">▶</div>
+              <div class="lesson-meta">Easing curves · 4 min</div>
+            </div>
+            <div class="lesson-row">
+              <div class="lesson-meta">Squash &amp; stretch</div>
+              <div class="lesson-node locked">🔒</div>
+            </div>
+            <div class="lesson-row">
+              <div class="lesson-node locked">🔒</div>
+              <div class="lesson-meta">Boss: Logo reveal</div>
+            </div>
+          </div>
+
+          <div class="screen-tabs">
+            <div class="tab active">
+              <svg viewBox="0 0 24 24">
+                <path d="M3 12L12 3l9 9M5 10v10h14V10" />
+              </svg>
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M12 3v18M3 12h18" />
+              </svg>
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+              </svg>
+            </div>
+            <div class="tab">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4" />
+                <path d="M4 21v-1a8 8 0 0116 0v1" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="marquee">
+    <div class="marquee-track">
+      <span>tiny lessons</span>
+      <span>real challenges</span>
+      <span>real feedback</span>
+      <span>real jobs</span>
+      <span>built for motion</span>
+      <span>tiny lessons</span>
+      <span>real challenges</span>
+      <span>real feedback</span>
+      <span>real jobs</span>
+      <span>built for motion</span>
+    </div>
+  </div>
+
+  <!-- PAIN POINTS -->
+  <section class="pain">
+    <div class="pain-inner">
+      <div class="section-num">02 / why this exists</div>
+      <h2 class="section-title">You didn't fail the course. The <em>course failed you.</em></h2>
+      <p style="max-width: 56ch; font-size: 18px; line-height: 1.55; color: rgba(244,241,236,.7); margin-bottom: 16px;">
+        Because 67% of designers quit their motion graphics course before week three. Not because they're lazy. Because
+        3 hour
+        lectures are <span class="strikethrough">absolutely</span> the worst way to learn a craft built on rhythm,
+        timing and play. And you're stuck because:
+      </p>
+
+      <div class="pain-grid">
+        <div class="pain-card">
+          <div class="qmark">"</div>
+          <h4>Tutorials feel like homework</h4>
+          <p>You want to make work that moves people. Instead you're 47 minutes into a video about the timeline panel.
+            <em class="again">Again.</em>
+          </p>
+        </div>
+        <div class="pain-card">
+          <div class="qmark">"</div>
+          <h4>You learn alone, you forget alone</h4>
+          <p>No streak. No squad. No reason to come back tomorrow. So you don't. The skills slide off and you start over
+            in six months.</p>
+        </div>
+        <div class="pain-card">
+          <div class="qmark">"</div>
+          <h4>You learn the tool, not the craft</h4>
+          <p>You can name every After Effects shortcut. Recruiters still ghost. Because nobody taught you the thinking
+            that gets hired.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEMO LESSON -->
+  <section class="demo-section" id="demo">
+    <div class="demo-inner">
+      <div>
+        <div class="section-num">03 / a tiny taste</div>
+        <h2 class="section-title">Try one lesson. <em>Right now.</em></h2>
+        <p style="font-size: 17px; line-height: 1.55; color: var(--ink-soft); max-width: 50ch;">
+          This is what one of our 10-second lessons feels like. Tap an answer. Get instant feedback. Earn XP. Repeat
+          tomorrow at 8am while your coffee brews. That's the whole thing.
+        </p>
+        <div style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-width: 360px;">
+          <div>
+            <div
+              style="font-family: 'Instrument Serif', serif; font-size: 44px; line-height: 1; color: var(--lav-deep);">
+              <em>90s</em>
+            </div>
+            <div
+              style="font-family: 'Geist Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 6px;">
+              average game play</div>
+          </div>
+          <div>
+            <div
+              style="font-family: 'Instrument Serif', serif; font-size: 44px; line-height: 1; color: var(--lav-deep);">
+              <em>30+</em>
+            </div>
+            <div
+              style="font-family: 'Geist Mono', monospace; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-top: 6px;">
+              lessons in beta</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-card" id="democard">
+        <div class="xp-pop" id="xppop">+25 XP</div>
+        <div class="demo-progress">
+          <div class="demo-progress-fill" id="progfill"></div>
+        </div>
+        <h3 class="demo-question">Which curve makes a logo feel <em>confident</em>?</h3>
+        <div class="demo-sub">Section 3 · Easing fundamentals · Q4 of 7</div>
+
+        <div class="demo-curve-stage">
+          <svg viewBox="0 0 320 160" preserveAspectRatio="none">
+            <line x1="20" y1="140" x2="300" y2="140" stroke="rgba(20,17,15,.15)" stroke-width="1"
+              stroke-dasharray="3 3" />
+            <line x1="20" y1="20" x2="20" y2="140" stroke="rgba(20,17,15,.15)" stroke-width="1"
+              stroke-dasharray="3 3" />
+            <path id="curvepath" d="M 20 140 C 90 140, 230 30, 300 20" stroke="#8b7cf6" stroke-width="3" fill="none"
+              stroke-linecap="round" />
+            <circle id="curveball" cx="20" cy="140" r="7" fill="#14110f">
+              <animateMotion dur="2.4s" repeatCount="indefinite" rotate="auto">
+                <mpath href="#curvepath" />
+              </animateMotion>
+            </circle>
+            <text x="20" y="156" font-family="Geist Mono, monospace" font-size="9" fill="#6f655c">0s</text>
+            <text x="290" y="156" font-family="Geist Mono, monospace" font-size="9" fill="#6f655c">1s</text>
+          </svg>
+        </div>
+
+        <div class="demo-options">
+          <button class="demo-opt" data-correct="false" onclick="answerQ(this)">
+            <span class="opt-key">A</span> Linear (no easing)
+          </button>
+          <button class="demo-opt" data-correct="false" onclick="answerQ(this)">
+            <span class="opt-key">B</span> Ease in slow
+          </button>
+          <button class="demo-opt" data-correct="true" onclick="answerQ(this)">
+            <span class="opt-key">C</span> Ease out, settle late
+          </button>
+          <button class="demo-opt" data-correct="false" onclick="answerQ(this)">
+            <span class="opt-key">D</span> Bounce, big overshoot
+          </button>
+        </div>
+
+        <div class="demo-result" id="demoresult"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HAD PROMISE SECTION -->
+  <section class="promise">
+    <div class="promise-inner">
+      <div class="section-num">04 / the promise</div>
+      <h2 class="section-title">From “I want to make <em>that</em>” to “I made <em>that.</em>”</h2>
+      <p style="font-size: 17px; line-height: 1.55; color: var(--ink-soft); max-width: 56ch;">
+        Three things every motion designer needs and almost no course gives you: somewhere to start, somewhere to go,
+        and people who get it.
+      </p>
+
+      <div class="promise-grid">
+        <div class="promise-card lav">
+          <div class="promise-icon">H</div>
+          <h3>Hope you'll <em>actually finish</em></h3>
+          <p>15 minutes. One screen. One concept. Streaks, levels, gems, leaderboards. The same tricks educational
+            experts use to
+            teach new concepts in 5 minutes a day, now teaching you bezier curves and character rigs.</p>
+          <div class="promise-tag"><span>Daily lessons</span><span>↗</span></div>
+        </div>
+        <div class="promise-card acid">
+          <div class="promise-icon">A</div>
+          <h3>The career you've <em>been quietly wanting</em></h3>
+          <p>Real challenges from real briefs. Build a portfolio while you learn, not after. Top-ranked users get strong
+            preferences
+            into the Grohwie Design Fellowship and our hiring partners' inboxes.</p>
+          <div class="promise-tag"><span>Portfolio + jobs</span><span>↗</span></div>
+        </div>
+        <div class="promise-card">
+          <div class="promise-icon">D</div>
+          <h3>A path, not <em>a YouTube tab.</em></h3>
+          <p>Two tracks. Motion Design. Graphic Design. Each one a clear skill tree from beginner to knowledgeable.
+            You'll always know what's next, why it matters, and where it leads.</p>
+          <div class="promise-tag"><span>2 tracks · 12 levels</span><span>↗</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COUNTER STRIP -->
+  <section class="counter-strip">
+    <div class="counter-inner">
+      <div class="stat">
+        <div class="num"><em>347+</em></div>
+        <div class="lbl">Designers waitlisted</div>
+      </div>
+      <div class="stat">
+        <div class="num"><em>30+</em></div>
+        <div class="lbl">Lessons in beta</div>
+      </div>
+      <div class="stat">
+        <div class="num"><em>2</em></div>
+        <div class="lbl">Tracks at launch</div>
+      </div>
+      <div class="stat">
+        <div class="num"><em>20+</em></div>
+        <div class="lbl">Countries represented</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="waitlist" id="waitlist">
+    <div class="confetti-wrap" id="confetti"></div>
+    <div class="waitlist-inner">
+
+      <div id="formstate">
+        <div class="waitlist-eyebrow">
+          <span class="live-dot"></span>
+          launching soon · Limited spots
+        </div>
+        <h2>Be part of the first <em>347+ designers</em> through the door.</h2>
+        <p class="lede2">
+          Early access drops in waves. Join the waitlist now and you'll get free founding-member access for life, plus a
+          “first in line” badge most of us would have killed for in our first year.
+        </p>
+
+        <div class="form-wrap">
+          <form id="waitform" onsubmit="submitForm(event)">
+            <div class="form-row">
+              <input type="email" class="form-input" placeholder="your.email@studio.com" required id="emailinput" />
+            </div>
+
+            <div class="role-row">
+              <div class="role-chip" data-role="motion">Motion designer</div>
+              <div class="role-chip" data-role="graphic">Graphic designer</div>
+              <div class="role-chip" data-role="uxui">Other designer</div>
+              <div class="role-chip" data-role="student">Design student</div>
+              <div class="role-chip" data-role="curious">Just curious</div>
+            </div>
+
+            <button type="submit" class="form-submit form-submit-block">
+              Save my spot
+              <span>→</span>
+            </button>
+          </form>
+
+          <div class="form-meta">
+            No spam. One launch email. Unsubscribe with one tap.
+          </div>
+        </div>
+      </div>
+
+      <div class="success" id="success">
+        <h3>Thanks! You're in. ✦</h3>
+        <p>We'll let you know the moment we launch and go live. Check your inbox — a quick hello is on its way (peek in
+          spam if it's shy).</p>
+        <div class="position-badge">
+          Your position · <strong id="position">#348</strong> · Founding member status locked
+        </div>
+        <div style="margin-top:24px; opacity:.7; font-size:14px;">
+          Want to skip the line? <a style="color:var(--acid); border-bottom: 1px solid var(--acid);" href="#"
+            onclick="alert('Share to skip — coming soon!'); return false;">Refer 3 friends →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">grohwie<em>✦</em></div>
+      <div class="footer-meta">
+        <div>made with care by <a href="https://www.grohwie.com" target="_blank">Grohwie.com</a></div>
+        <div>questions? <a href="mailto:grow@grohwie.com">grow@grohwie.com</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // === Demo lesson interaction ===
+    const democard = document.getElementById('democard');
+    const result = document.getElementById('demoresult');
+    const xppop = document.getElementById('xppop');
+    const progfill = document.getElementById('progfill');
+    const trustcount = document.getElementById('trustcount');
+    let answered = false;
+
+    function answerQ(btn) {
+      if (answered) return;
+      answered = true;
+      const correct = btn.dataset.correct === 'true';
+      document.querySelectorAll('.demo-opt').forEach(o => {
+        if (o.dataset.correct === 'true') o.classList.add('correct');
+        else if (o === btn) o.classList.add('wrong');
+      });
+      if (correct) {
+        btn.classList.add('correct');
+        result.textContent = '✦ Nice. Ease-out lets the logo land with weight, like a confident person finishing a sentence. +25 XP';
+        result.style.background = 'var(--acid)';
+        xppop.classList.add('go');
+        progfill.style.width = '75%';
+      } else {
+        result.textContent = '✗ Close. Linear feels robotic. The right answer is C — ease-out lets the motion settle, which reads as confidence.';
+        result.style.background = '#ffd5cc';
+        result.style.borderLeftColor = 'var(--hot)';
+        progfill.style.width = '70%';
+      }
+      result.classList.add('show');
+      setTimeout(() => xppop.classList.remove('go'), 1300);
+
+      // Reset after 5s for replay
+      setTimeout(() => {
+        answered = false;
+        result.classList.remove('show');
+        progfill.style.width = '60%';
+        document.querySelectorAll('.demo-opt').forEach(o => o.classList.remove('correct', 'wrong'));
+      }, 6000);
+    }
+
+    // === Role chips ===
+    document.querySelectorAll('.role-chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        document.querySelectorAll('.role-chip').forEach(c => c.classList.remove('on'));
+        chip.classList.add('on');
+      });
+    });
+
+    // === Form submit + confetti ===
+    const formstate = document.getElementById('formstate');
+    const success = document.getElementById('success');
+    const position = document.getElementById('position');
+    const confetti = document.getElementById('confetti');
+
+    // ⚠️ PASTE YOUR APPS SCRIPT WEB APP URL HERE (after deploying)
+    const WAITLIST_ENDPOINT = 'https://script.google.com/macros/s/AKfycbxVEN7d5-3Uqf50iJ7VLocmhJta9DoH2gNq81Qgyh2JjajhZfjv5V4lC2Q14dRKWd63/exec';
+
+    async function submitForm(e) {
+      e.preventDefault();
+      const email = document.getElementById('emailinput').value.trim();
+      if (!email || !email.includes('@')) return;
+
+      const submitBtn = document.querySelector('.form-submit');
+      const originalLabel = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = 'Saving…';
+
+      const role = document.querySelector('.role-chip.on')?.dataset.role || '';
+
+      try {
+        await fetch(WAITLIST_ENDPOINT, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ email, role, source: 'landing', ts: new Date().toISOString() })
+        });
+      } catch (err) {
+        console.warn('waitlist post error', err);
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = originalLabel;
+
+      const pos = 348 + Math.floor(Math.random() * 4);
+      position.textContent = '#' + pos;
+      trustcount.textContent = pos;
+
+      formstate.style.display = 'none';
+      success.classList.add('show');
+
+      // confetti
+      const colors = ['#8b7cf6', '#d4ff3e', '#ff5a3c', '#ffb800', '#c5bcfa', '#ffffff'];
+      for (let i = 0; i < 36; i++) {
+        const c = document.createElement('div');
+        c.className = 'conf';
+        c.style.left = (40 + Math.random() * 20) + '%';
+        c.style.top = '40%';
+        c.style.background = colors[Math.floor(Math.random() * colors.length)];
+        c.style.setProperty('--x', (Math.random() * 400 - 200) + 'px');
+        c.style.animationDelay = (Math.random() * 0.4) + 's';
+        confetti.appendChild(c);
+        requestAnimationFrame(() => c.classList.add('go'));
+        setTimeout(() => c.remove(), 1800);
+      }
+    }
+
+    // === Live counter creep (psychology: feels alive) ===
+    let count = 347;
+    setInterval(() => {
+      if (Math.random() > 0.7 && !success.classList.contains('show')) {
+        count++;
+        trustcount.textContent = count.toLocaleString();
+      }
+    }, 8000);
+
+    // === Reveal on scroll ===
+    // Use a class so the reveal transition doesn't fight the .pain-card:hover transform.
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('revealed');
+          // After the reveal completes, drop the inline transition so hover transforms feel snappy
+          setTimeout(() => {
+            en.target.style.transition = '';
+            en.target.style.transform = '';
+          }, 700);
+          io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.pain-card, .promise-card').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity .6s cubic-bezier(.2,.8,.2,1), transform .6s cubic-bezier(.2,.8,.2,1)';
+      io.observe(el);
+    });
+    // Reveal styles handled via class so they don't override hover transforms after settle
+    const revealStyle = document.createElement('style');
+    revealStyle.textContent = '.pain-card.revealed, .promise-card.revealed { opacity:1 !important; transform:translateY(0) !important; }';
+    document.head.appendChild(revealStyle);
+
+    // === Fake tutorial player (the "47-minute timeline panel" pain) ===
+    (function fakePlayer() {
+      const card = document.getElementById('paincard1');
+      if (!card) return;
+      const player = card.querySelector('.fake-player');
+      const fill = document.getElementById('fpFill');
+      const now = document.getElementById('fpNow');
+      const title = document.getElementById('fpTitle');
+      const caption = document.getElementById('fpCaption');
+      const playBtn = document.getElementById('fpPlay');
+      const skipBtn = document.getElementById('fpSkip');
+
+      const chapters = [
+        'Intro to the Timeline Panel (Pt. 1 of 7)',
+        'Setting up your workspace (still)',
+        'A brief history of keyframes',
+        'Why we use seconds (yes, really)',
+        'Customizing your panel layout',
+        'The Timeline Panel — finally',
+        'Wait, first, a word about preferences',
+      ];
+      const captions = [
+        "“…and that's the timeline panel.”",
+        "“Before we begin, let me set up my workspace…”",
+        "“In 1952, animators used physical cells…”",
+        "“A second, as you may know, has 60 frames…”",
+        "“Let's drag this panel — actually, let me undo that.”",
+        "“We'll cover this next video.”",
+        "“…anyway, where were we?”",
+      ];
+
+      let seconds = 0;       // mock playhead, in seconds
+      let chapter = 0;
+      let timer = null;
+      let playing = false;
+
+      function fmt(s) {
+        const m = Math.floor(s / 60), r = s % 60;
+        return String(m).padStart(2, '0') + ':' + String(r).padStart(2, '0');
+      }
+      function tick() {
+        seconds += 7; // crawl forward — feels endless
+        // bump chapter every ~14s of "watching"
+        if (seconds % 14 === 0 && chapter < chapters.length - 1) {
+          chapter++;
+          title.textContent = chapters[chapter];
+          caption.textContent = captions[chapter];
+        }
+        // progress is mocked against 192 (3:12) to make it feel slow
+        const pct = Math.min(95, (seconds / 192) * 100);
+        fill.style.width = pct + '%';
+        now.textContent = fmt(Math.min(seconds, 2823)); // caps near "47:03"
+        if (seconds >= 47 * 60 + 3) {
+          stop();
+          player.classList.add('bored');
+          caption.textContent = '47 minutes in. Still the timeline panel.';
+          playBtn.textContent = '↻ start over';
+        }
+      }
+      function start() {
+        playing = true;
+        player.classList.add('playing');
+        player.classList.remove('bored');
+        caption.textContent = captions[chapter];
+        playBtn.textContent = '⏸ pause';
+        timer = setInterval(tick, 220);
+      }
+      function stop() {
+        playing = false;
+        player.classList.remove('playing');
+        playBtn.textContent = '▶ play';
+        if (timer) clearInterval(timer);
+      }
+      function reset() {
+        stop();
+        seconds = 0; chapter = 0;
+        fill.style.width = '0%';
+        now.textContent = '00:00';
+        title.textContent = chapters[0];
+        caption.textContent = 'Click play. We dare you.';
+        player.classList.remove('bored');
+        playBtn.textContent = '▶ play';
+      }
+
+      playBtn.addEventListener('click', () => {
+        if (player.classList.contains('bored')) { reset(); start(); return; }
+        playing ? stop() : start();
+      });
+      skipBtn.addEventListener('click', () => {
+        // "skipping ahead" just lands you in another intro
+        seconds += 60 * 6; // 6 minutes
+        chapter = Math.min(chapter + 1, chapters.length - 1);
+        title.textContent = chapters[chapter];
+        caption.textContent = '“Before we get to that, real quick…”';
+        player.classList.add('done');
+        setTimeout(() => player.classList.remove('done'), 350);
+        const pct = Math.min(95, (seconds / 192) * 100);
+        fill.style.width = pct + '%';
+        now.textContent = fmt(Math.min(seconds, 2823));
+      });
+    })();
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,23 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "live-server (auto-reload)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["live-server", "--port=5173", "--no-browser", "--entry-file=grohwie-app-landing.html"],
+      "port": 5173
+    },
+    {
+      "name": "serve (static)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-l", "5174", "."],
+      "port": 5174
+    },
+    {
+      "name": "python http.server",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "5175"],
+      "port": 5175
+    }
+  ]
+}
