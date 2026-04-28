@@ -45,6 +45,7 @@
 
     html {
       scroll-behavior: smooth;
+      overflow-x: hidden;
     }
 
     body {
@@ -53,6 +54,8 @@
       color: var(--ink);
       font-feature-settings: "ss01", "ss02", "cv11";
       overflow-x: hidden;
+      width: 100%;
+      max-width: 100%;
       -webkit-font-smoothing: antialiased;
     }
 
@@ -188,6 +191,7 @@
       max-width: 1440px;
       margin: 0 auto;
       position: relative;
+      overflow: hidden;
     }
 
     .hero-meta {
@@ -395,6 +399,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow: hidden;
     }
 
     .floating-bits {
@@ -403,6 +408,7 @@
       height: 100%;
       pointer-events: none;
       z-index: 3;
+      overflow: hidden;
     }
 
     .float-bit {
@@ -1833,7 +1839,7 @@
 
   <!-- TOP BAR -->
   <header class="topbar">
-    <div class="logo">Grohwie<span class="star">✦</span></div>
+    <a href="https://www.grohwie.com" class="logo"><span>Grohwie<span class="star">✦</span></span></a>
     <div class="topbar-meta">
       <!-- <span class="hide-mob">(motion / graphics / ui-ux)
     <span>2026</span> </span> -->
@@ -1849,7 +1855,7 @@
     </div>
 
     <div class="hero-text">
-      <div class="eyebrow">Now in beta · For motion graphic designers</div>
+      <div class="eyebrow">Now in beta · For motion designers</div>
       <h1>
         Learn motion <em>like a game</em>,
         get hired <em>like a pro.</em>
@@ -2196,7 +2202,7 @@
         <h3>Thanks! You're in. ✦</h3>
         <p>We'll let you know the moment we launch and go live.</p>
         <div class="position-badge">
-          Your position · <strong id="position">#348</strong> · Founding member status locked
+          Your position · <strong id="position">#348</strong> · Founding member status unlocked
         </div>
         <div style="margin-top:24px; opacity:.7; font-size:14px;">
           Want to skip the line? Just share the news to help us find more awesome designers like you. 
@@ -2210,7 +2216,7 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-logo">grohwie<em>✦</em></div>
+      <a href="https://www.grohwie.com" class="footer-logo"><span>grohwie<em>✦</em></span></a>
       <div class="footer-meta">
         <div>made with care by <a href="https://www.grohwie.com" target="_blank">Grohwie.com</a></div>
         <div>questions? <a href="mailto:grow@grohwie.com">grow@grohwie.com</a></div>
