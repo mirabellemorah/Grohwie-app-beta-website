@@ -182,16 +182,24 @@
 
     /* === Hero === */
     .hero {
-      min-height: 100vh;
       padding: 120px 28px 60px;
       display: grid;
       grid-template-columns: 1fr 0.85fr;
       gap: 48px;
-      align-items: center;
+      align-items: start;
       max-width: 1440px;
       margin: 0 auto;
       position: relative;
-      overflow: hidden;
+      overflow: visible;
+    }
+
+    .hero-text,
+    .phone-stage {
+      min-width: 0;
+    }
+
+    .hero-text {
+      max-width: 640px;
     }
 
     .hero-meta {
@@ -1752,6 +1760,42 @@
         display: none;
       }
 
+      .phone-stage {
+        width: 100%;
+        justify-content: center;
+        padding: 0 24px;
+      }
+
+      .floating-bits {
+        width: 100%;
+      }
+
+      .float-bit {
+        font-size: 10px;
+        padding: 5px 10px;
+        white-space: nowrap;
+      }
+
+      .float-bit.b1 {
+        top: 4%;
+        left: 2%;
+      }
+
+      .float-bit.b2 {
+        top: 18%;
+        right: 2%;
+      }
+
+      .float-bit.b3 {
+        bottom: 22%;
+        left: 2%;
+      }
+
+      .float-bit.b4 {
+        bottom: 6%;
+        right: 2%;
+      }
+
       .pain-grid,
       .promise-grid {
         grid-template-columns: 1fr;
@@ -1855,15 +1899,15 @@
     </div>
 
     <div class="hero-text">
-      <div class="eyebrow">Now in beta · For motion designers</div>
+      <div class="eyebrow">Now in dev · For motion designers</div>
       <h1>
         Learn motion <em>like a game</em>,
         get hired <em>like a pro.</em>
         <span class="tag">15 min/day</span>
       </h1>
       <p class="lede">
-        The gamified learning platform for people who want to become better motion designers, need direction, and are
-        tired of $$$ expensive courses they never finish. Learn design and animation principles in tiny daily sprints.
+        The gamified learning app for people who want to learn motion design, need structured direction and are
+        tired of spending on expensive $$$ courses they never finish. Learn mograph principles in tiny daily sprints.
         Join challenges, communities and find job opportunities
         while you play and learn.
       </p>
@@ -2205,7 +2249,7 @@
           Your position · <strong id="position">#348</strong> · Founding member status unlocked
         </div>
         <div style="margin-top:24px; opacity:.7; font-size:14px;">
-          Want to skip the line? Just share the news to help us find more awesome designers like you.
+          Want to skip the line? Just share the news to help us find more awesome people like you.
           <!-- <a style="color:var(--acid); border-bottom: 1px solid var(--acid);" href="#"
             onclick="alert('Share to skip — coming soon!'); return false;">Refer 3 friends →</a> -->
         </div>
